@@ -74,9 +74,11 @@ type _Exclude<T, K> = T extends K ? never : T
 
 type omitRecentFiles = _Exclude<keyof State, "recentFiles">
 
-type _Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
+type _Omit<T, K> = Pick<T, _Exclude<keyof T, K>>;
 
 type omitRecentFiles2 = _Omit<State, "recentFiles">
+
+type omitRecentFiles3 = _Omit<State, keyof State2>
 
 /**
  * 
@@ -172,5 +174,29 @@ const foo3 = (init: Options) => (Options: ___OptionsUpdate) => {
     }
 }
 
-console.log(foo3(INIT_OPTIONS)({}))
-console.log(foo3(INIT_OPTIONS)({ height: 20 }))
+// console.log(foo3(INIT_OPTIONS)({}))
+// console.log(foo3(INIT_OPTIONS)({ height: 20 }))
+
+/**
+ * Deliverable 4
+ */
+
+type X = {
+    x: string,
+    y: string,
+    z: string
+}
+
+type Y = X & { s: number, t: number, u: number }
+
+type YnotX = _Exclude<keyof Y, keyof X>  // type YnotX = "s" | "t" | "u"
+
+type _YnotX = _Omit<Y, keyof X>
+/** Output
+ * 
+ * type _YnotX = {
+    s: number;
+    t: number;
+    u: number;
+    }
+ */
