@@ -13,34 +13,62 @@ var Branch = /** @class */ (function () {
     }
     return Branch;
 }());
-var isLeaf = function (t) { return t.tag === "leaf"; };
-var isBranch = function (t) { return t.tag === "branch"; };
+var isLeaf = function (t) {
+    return t.tag === "leaf";
+};
+var isBranch = function (t) {
+    return t.tag === "branch";
+};
 // Signature    size: Tree<A> -> number
 var size = function (tree) {
-    // if(!isBranch(tree)){return 0}
-    // if (!isBranch) { return 0 }
     if (isLeaf(tree)) {
         return 1;
     }
     else {
         return 1 + size(tree.left) + size(tree.right);
-        // if(tree.left){
-        //     return 1 + size(tree.left)
-        // }else if(tree.right) {
-        //     return 1 + size(tree.right)
-        // }
-        // else{ return 0}
     }
-    // else if(isLeaf(tree)){
-    //     return 1 + size(tree) }
 };
-var testTree = {
+var tree1 = {
+    tag: "leaf",
+    value: "leaf1"
+};
+// console.log(size(tree1)); // 3
+// Signature   max: Tree<number> -> number
+var tree2 = {
     tag: "branch",
-    left: { tag: "leaf", value: "leaf1" },
-    right: { tag: "leaf", value: "leaf2" }
+    left: { tag: "leaf", value: 8 },
+    right: {
+        tag: "branch",
+        left: { tag: "leaf", value: 5 },
+        right: {
+            tag: "branch",
+            left: { tag: "leaf", value: 7 },
+            right: { tag: "leaf", value: 9 }
+        }
+    }
 };
-console.log(size(testTree));
-// console.log(dropWhile(
-//   (x: number) => x < 2,
-//   n4
-// ));
+var max = function (tree) {
+    var currentMax = 0;
+    if (isLeaf(tree)) {
+        currentMax = currentMax >= tree.value ? currentMax : tree.value;
+    }
+    else {
+        var leftMax = max(tree.left);
+        var rightMax = max(tree.right);
+        currentMax = leftMax >= rightMax ? leftMax : rightMax;
+    }
+    return currentMax;
+};
+// console.log(max(tree2)); //9
+// Signature  depth: Tree<A> -> number
+var depth = function (tree) {
+    if (isLeaf(tree)) {
+        return 0;
+    }
+    else {
+        var depthLeft = 1 + depth(tree.left);
+        var depthRight = 1 + depth(tree.right);
+        return depthLeft >= depthRight ? depthLeft : depthRight;
+    }
+};
+console.log(depth(tree2));
