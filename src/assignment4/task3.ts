@@ -1,3 +1,5 @@
+// TODO: Publish to npm
+
 type Tree<A> = Leaf<A> | Branch<A>;
 
 class Leaf<A> {
@@ -192,6 +194,70 @@ const tree5: Tree<number> = {
     },
 };
 
-console.log(filter((i) => i === 5, tree5))
+// console.log(filter((i) => i === 5, tree5))
+
+/** 
+ * Branch {
+    tag: 'branch',
+    left: Leaf { tag: 'leaf', value: 2 },
+    right:
+     Branch {
+       tag: 'branch',
+       left: null,
+       right: Leaf { tag: 'leaf', value: 4 } } }
+*/
 
 
+// Signature zip: Tree<A> -> Tree<B> -> Tree<Array<A|B>>
+
+const zip = <A, B>(tree1: Tree<A>, tree2: Tree<B>): Tree<Array<A | B>> | undefined => {
+    if (isLeaf(tree1) && isLeaf(tree2)) {
+        return new Leaf([tree1.value, tree2.value])
+    } else if (isBranch(tree1) && isBranch(tree2)) {
+        const leftZipped = zip(tree1.left, tree2.left)
+        const rifhtZipped = zip(tree1.right, tree2.right)
+        if (leftZipped && rifhtZipped)
+            return new Branch(leftZipped, rifhtZipped)
+    } else {
+        return undefined
+    }
+}
+
+const tree6: Tree<number> = {
+    tag: "branch",
+    left: { tag: "leaf", value: 2 },
+    right: {
+        tag: "branch",
+        left: { tag: "leaf", value: 5 },
+        right: { tag: "leaf", value: 4 }
+    },
+};
+
+console.log(JSON.stringify(zip(tree6, tree6), null, 2))
+/** {
+  "tag": "branch",
+  "left": {
+    "tag": "leaf",
+    "value": [
+      2,
+      2
+    ]
+  },
+  "right": {
+    "tag": "branch",
+    "left": {
+      "tag": "leaf",
+      "value": [
+        5,
+        5
+      ]
+    },
+    "right": {
+      "tag": "leaf",
+      "value": [
+        4,
+        4
+      ]
+    }
+  }
+}*/

@@ -1,3 +1,4 @@
+// TODO: Publish to npm
 var Leaf = /** @class */ (function () {
     function Leaf(value) {
         this.tag = "leaf";
@@ -144,9 +145,6 @@ var tree4 = {
 // Signature  filter : ((Tree<A>)=> boolean) => Tree<A> => Tree<A>
 var filter = function (f, tree) {
     if (isLeaf(tree)) {
-        if (isLeaf(tree) === null) {
-            return;
-        }
         return !f(tree.value) ? new Leaf(tree.value) : null;
     }
     else {
@@ -162,4 +160,39 @@ var tree5 = {
         right: { tag: "leaf", value: 4 }
     }
 };
-console.log(filter(function (i) { return i === 5; }, tree5));
+// console.log(filter((i) => i === 5, tree5))
+// Branch {
+//     tag: 'branch',
+//     left: Leaf { tag: 'leaf', value: 2 },
+//     right:
+//      Branch {
+//        tag: 'branch',
+//        left: null,
+//        right: Leaf { tag: 'leaf', value: 4 } } }
+// Signature zip 
+// type XX = <A,B>(tree1: Leaf<A>,tree2: Leaf<B>) => Leaf<Array<A|B>>
+// type YY = <A,B>(tree1: Branch<A>,tree2: Branch<B>) => Branch<Array<A|B>>
+var zip = function (tree1, tree2) {
+    if (isLeaf(tree1) && isLeaf(tree2)) {
+        return new Leaf([tree1.value, tree2.value]);
+    }
+    else if (isBranch(tree1) && isBranch(tree2)) {
+        var leftZipped = zip(tree1.left, tree2.left);
+        var rifhtZipped = zip(tree1.right, tree2.right);
+        if (leftZipped && rifhtZipped)
+            return new Branch(leftZipped, rifhtZipped);
+    }
+    else {
+        return undefined;
+    }
+};
+var tree6 = {
+    tag: "branch",
+    left: { tag: "leaf", value: 2 },
+    right: {
+        tag: "branch",
+        left: { tag: "leaf", value: 5 },
+        right: { tag: "leaf", value: 4 }
+    }
+};
+console.log(JSON.stringify(zip(tree6, tree6), ['left'], 2));

@@ -16,14 +16,14 @@
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
 
     "sourceMap": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "outDir": "dist",
+    "rootDir": "./src/assignment4",
 
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }
